@@ -1,2 +1,5 @@
+
 # CutSession
-A backend app for scheduling sessions with vendors 
+
+A brief description of what this project does and who it's for
+
