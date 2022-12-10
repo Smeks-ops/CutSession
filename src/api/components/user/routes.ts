@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { UserController } from './controller';
+import { UserController } from './user.controller';
 
 export class UserRoutes {
 	private readonly controller: UserController = new UserController();

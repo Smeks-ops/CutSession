@@ -1,7 +1,8 @@
 import { pool } from '../../../config/db';
 import Logger from '../../../config/logger';
+import bcrypt from 'bcryptjs';
 
-import { IUser, UserDTO } from './dto';
+import { IUser, UserDTO } from './user.dto';
 
 export class UserRepository {
 	readAll(): Promise<IUser[]> {
@@ -39,9 +40,11 @@ export class UserRepository {
 
 	create(user: UserDTO): Promise<IUser> {
 		return new Promise((resolve, reject) => {
+			const salt = bcrypt.genSaltSync(10);
+			const hashedPassword = bcrypt.hashSync(user.password, salt);
 			pool.query(
-				'INSERT INTO users (email, username) VALUES($1, $2) RETURNING *',
-				[user.email, user.username],
+				'INSERT INTO users (email, username, name, dob, cityOfResidence, password, phoneNumber ) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+				[user.email, user.username, user.name, user.dob, user.cityOfResidence, hashedPassword, user.phoneNumber],
 				(err, res) => {
 					if (err) {
 						Logger.error(err.message);

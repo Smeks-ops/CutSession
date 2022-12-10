@@ -17,7 +17,7 @@ client
   .connect()
   .then(() => {
     console.log("Running SQL seed...");
-    client.query(seedQuery, ["john@doe.com", "johndoe"], (err) => {
+    client.query(seedQuery, ["john@doe.com", "johndoe", "John", ], (err) => {
       if (err) throw err;
       console.log("Seed completed successfully!");
       client.end();

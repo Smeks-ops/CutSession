@@ -1,8 +1,8 @@
 import { bind } from 'decko';
 import { NextFunction, Request, Response } from 'express';
 
-import { UserDTO } from './dto';
-import { UserRepository } from './repository';
+import { UserDTO } from './user.dto';
+import { UserRepository } from './user.repository';
 
 export class UserController {
 	private readonly repo: UserRepository = new UserRepository();
@@ -36,15 +36,20 @@ export class UserController {
 	async createUser(req: Request, res: Response, next: NextFunction) {
 		try {
 			const dto = UserDTO.fromRequest(req);
-			if (dto === undefined || !dto.isValid()) return res.sendStatus(400);
+
+			if (dto === undefined || dto.isValid().check === false) {
+				return res.status(400).json({ message: dto.isValid().message });
+			}
 
 			const existingUser = await this.repo.readByEmailOrUsername(dto.email, dto.username);
-			if (existingUser !== undefined) return res.sendStatus(400);
+			if (existingUser !== undefined)
+				return res.status(409).json({ message: 'User already exists' });
 
 			const user = await this.repo.create(dto);
 
 			return res.status(201).json(user);
 		} catch (err) {
+			console.log(err);
 			return next(err);
 		}
 	}

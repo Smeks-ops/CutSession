@@ -1,3 +1,0 @@
-DROP DATABASE IF EXISTS nodejs_test;
-
-CREATE DATABASE nodejs_test;
