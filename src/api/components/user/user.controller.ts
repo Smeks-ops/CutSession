@@ -42,16 +42,11 @@ export class UserController {
 			}
 
 			const existingUser = await this.repo.readByEmailOrUsername(dto.email, dto.username);
-			if (existingUser !== undefined)
-				return res.status(409).json({ message: 'User already exists' });
+			if (existingUser !== undefined) return res.status(409).json({ message: 'User already exists' });
 
 			const user = await this.repo.create(dto);
 
-			return {
-				status: 201,
-				body: user,
-				message: 'User created successfully',
-			};
+			return res.status(201).json({ user, message: 'User created successfully' });
 		} catch (err) {
 			console.log(err);
 			return next(err);

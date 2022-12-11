@@ -42,20 +42,15 @@ export class MerchantController {
 			}
 
 			const existingMerchant = await this.repo.readByEmailOrUsername(dto.email, dto.username);
-			if (existingMerchant !== undefined)
-				return res.status(409).json({ message: 'merchant already exists' });
+			if (existingMerchant !== undefined) return res.status(409).json({ message: 'merchant already exists' });
 
 			const merchant = await this.repo.create(dto);
 
-            if (merchant === undefined) {
-                return res.status(500).json({ message: 'merchant not created' });
-            }
+			if (merchant === undefined) {
+				return res.status(500).json({ message: 'merchant not created' });
+			}
 
-			return {
-				status: 201,
-				body: merchant,
-				message: 'Merchant created successfully',
-			};
+			return res.status(201).json({ merchant, message: 'merchant created successfully' });
 		} catch (err) {
 			console.log(err);
 			return next(err);
