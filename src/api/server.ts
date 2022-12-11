@@ -4,6 +4,8 @@ import express, { json, Request, Response, NextFunction } from 'express';
 
 import Logger from '../config/logger';
 import { UserRoutes } from './components/user/routes';
+import { MerchantRoutes } from './components/merchants/routes'
+
 
 export class Server {
 	private readonly _app: express.Application = express();
@@ -25,6 +27,7 @@ export class Server {
 	private registerRoutes() {
 		this._app.get('/', (req: Request, res: Response) => res.send('Hello World!'));
 		this._app.use('/users', new UserRoutes().router);
+		this._app.use('/merchants', new MerchantRoutes().router);
 	}
 
 	private registerErrorHandler() {

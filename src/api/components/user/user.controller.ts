@@ -47,7 +47,11 @@ export class UserController {
 
 			const user = await this.repo.create(dto);
 
-			return res.status(201).json(user);
+			return {
+				status: 201,
+				body: user,
+				message: 'User created successfully',
+			};
 		} catch (err) {
 			console.log(err);
 			return next(err);
