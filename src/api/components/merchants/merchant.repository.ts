@@ -1,6 +1,7 @@
 import { pool } from '../../../config/db';
 import Logger from '../../../config/logger';
 import bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 
 import { IMerchant, MerchantDTO } from './merchant.dto';
 
@@ -45,6 +46,17 @@ export class MerchantRepository {
 					Logger.error(err.message);
 					reject('Failed to fetch user!');
 				} else resolve(res.rowCount ? res.rows[0] : undefined);
+			});
+		});
+	}
+
+	signJWT(email: string, merchantId: string): Promise<string> {
+		return new Promise((resolve, reject) => {
+			jwt.sign({ id: merchantId, email: email }, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+				if (err) {
+					Logger.error(err.message);
+					reject('Failed to sign JWT!');
+				} else resolve(token);
 			});
 		});
 	}

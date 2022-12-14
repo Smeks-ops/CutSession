@@ -2,6 +2,7 @@ import { pool } from '../../../config/db';
 import Logger from '../../../config/logger';
 import bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
 import { IUser, UserDTO } from './user.dto';
 
@@ -41,7 +42,7 @@ export class UserRepository {
 
 	readByUsername(username: string): Promise<IUser> {
 		return new Promise((resolve, reject) => {
-			pool.query<IUser>('SELECT FROM users WHERE username = $1', [username], (err, res) => {
+			pool.query<IUser>('SELECT * FROM users WHERE username = $1', [username], (err, res) => {
 				if (err) {
 					Logger.error(err.message);
 					reject('Failed to fetch user!');

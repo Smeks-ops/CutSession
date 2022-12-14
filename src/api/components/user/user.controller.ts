@@ -70,7 +70,6 @@ export class UserController {
 	
 				const user = await this.repo.readByUsername(username);
 				if (!user) return res.status(404).json({ message: 'User not found' });
-				console.log(user);
 	
 				const isMatch = await bcrypt.compare(req.body.password, user.password);
 				if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
@@ -90,7 +89,7 @@ export class UserController {
 				const isMatch = await bcrypt.compare(req.body.password, merchant.password);
 				if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 	
-				const token = await this.repo.signJWT(merchant.email, JSON.stringify(merchant.id));
+				const token = await this.merchantRepo.signJWT(merchant.email, JSON.stringify(merchant.id));
 	
 				return res.status(200).json({ merchant, token });
 			}
