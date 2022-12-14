@@ -38,6 +38,17 @@ export class MerchantRepository {
 		});
 	}
 
+	readByUsername(username: string): Promise<IMerchant> {
+		return new Promise((resolve, reject) => {
+			pool.query<IMerchant>('SELECT * FROM merchants WHERE username = $1', [username], (err, res) => {
+				if (err) {
+					Logger.error(err.message);
+					reject('Failed to fetch user!');
+				} else resolve(res.rowCount ? res.rows[0] : undefined);
+			});
+		});
+	}
+
 	create(merchant: MerchantDTO): Promise<IMerchant> {
 		return new Promise((resolve, reject) => {
 			const salt = bcrypt.genSaltSync(10);

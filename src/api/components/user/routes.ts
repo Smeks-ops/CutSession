@@ -13,5 +13,6 @@ export class UserRoutes {
 	private initRoutes(): void {
 		this.router.route('/').get(this.controller.readUsers).post(this.controller.createUser);
 		this.router.route('/:id').get(this.controller.readUser).delete(this.controller.deleteUser);
+		this.router.route('/sign-in').post(this.controller.loginUser);
 	}
 }

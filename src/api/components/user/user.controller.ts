@@ -3,9 +3,12 @@ import { NextFunction, Request, Response } from 'express';
 
 import { UserDTO } from './user.dto';
 import { UserRepository } from './user.repository';
+import { MerchantRepository } from '../merchants/merchant.repository';
+import bcrypt from 'bcryptjs';
 
 export class UserController {
 	private readonly repo: UserRepository = new UserRepository();
+	private readonly merchantRepo: MerchantRepository = new MerchantRepository();
 
 	@bind
 	async readUsers(req: Request, res: Response, next: NextFunction) {
@@ -47,6 +50,50 @@ export class UserController {
 			const user = await this.repo.create(dto);
 
 			return res.status(201).json({ user, message: 'User created successfully' });
+		} catch (err) {
+			console.log(err);
+			return next(err);
+		}
+	}
+
+	@bind
+	async loginUser(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { username, password, accessType } = req.body;
+
+			if (accessType === undefined) return res.status(400).json({ message: 'Access type required' });
+
+			if (accessType === 'USER') {
+				if (username === undefined || password === undefined) {
+					return res.status(400).json({ message: 'Username and password required' });
+				}
+	
+				const user = await this.repo.readByUsername(username);
+				if (!user) return res.status(404).json({ message: 'User not found' });
+				console.log(user);
+	
+				const isMatch = await bcrypt.compare(req.body.password, user.password);
+				if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+	
+				const token = await this.repo.signJWT(user.email, JSON.stringify(user.id));
+	
+				return res.status(200).json({ user, token });
+
+			} else if (accessType === 'MERCHANT') {
+				if (username === undefined || password === undefined) {
+					return res.status(400).json({ message: 'Username and password required' });
+				}
+	
+				const merchant = await this.merchantRepo.readByUsername(username);
+				if (!merchant) return res.status(404).json({ message: 'User not found' });
+	
+				const isMatch = await bcrypt.compare(req.body.password, merchant.password);
+				if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+	
+				const token = await this.repo.signJWT(merchant.email, JSON.stringify(merchant.id));
+	
+				return res.status(200).json({ merchant, token });
+			}
 		} catch (err) {
 			console.log(err);
 			return next(err);

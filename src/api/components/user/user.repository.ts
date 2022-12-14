@@ -1,6 +1,7 @@
 import { pool } from '../../../config/db';
 import Logger from '../../../config/logger';
 import bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 
 import { IUser, UserDTO } from './user.dto';
 
@@ -34,6 +35,28 @@ export class UserRepository {
 					Logger.error(err.message);
 					reject('Failed to fetch user!');
 				} else resolve(res.rowCount ? res.rows[0] : undefined);
+			});
+		});
+	}
+
+	readByUsername(username: string): Promise<IUser> {
+		return new Promise((resolve, reject) => {
+			pool.query<IUser>('SELECT FROM users WHERE username = $1', [username], (err, res) => {
+				if (err) {
+					Logger.error(err.message);
+					reject('Failed to fetch user!');
+				} else resolve(res.rowCount ? res.rows[0] : undefined);
+			});
+		});
+	}
+
+	signJWT(email: string, userId: string): Promise<string> {
+		return new Promise((resolve, reject) => {
+			jwt.sign({ id: userId, email: email }, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+				if (err) {
+					Logger.error(err.message);
+					reject('Failed to sign JWT!');
+				} else resolve(token);
 			});
 		});
 	}
