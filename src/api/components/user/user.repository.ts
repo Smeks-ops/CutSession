@@ -29,6 +29,17 @@ export class UserRepository {
 		});
 	}
 
+	readByEmail(email: string): Promise<IUser> {
+		return new Promise((resolve, reject) => {
+			pool.query<IUser>('SELECT * FROM users WHERE email = $1', [email], (err, res) => {
+				if (err) {
+					Logger.error(err.message);
+					reject('Failed to fetch user!');
+				} else resolve(res.rowCount ? res.rows[0] : undefined);
+			});
+		});
+	}
+
 	readByEmailOrUsername(email: string, username: string): Promise<IUser> {
 		return new Promise((resolve, reject) => {
 			pool.query<IUser>('SELECT * FROM users WHERE email = $1 OR username = $2', [email, username], (err, res) => {
@@ -61,6 +72,30 @@ export class UserRepository {
 			});
 		});
 	}
+
+	/* private async verify(payload: any, next: any): Promise<void> {
+		try {
+			//  pass error == null on error otherwise we get a 500 error instead of 401
+
+			const user = await this.userRepo.findOne({
+				relations: ['userRole'],
+				where: {
+					active: true,
+					id: payload.userID
+				}
+			});
+
+			if (!user) {
+				return next(null, null);
+			}
+
+			await this.setPermissions(user);
+
+			return next(null, user);
+		} catch (err) {
+			return next(err);
+		}
+	} */
 
 	create(user: UserDTO): Promise<IUser> {
 		return new Promise((resolve, reject) => {
