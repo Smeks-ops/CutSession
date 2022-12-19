@@ -64,7 +64,7 @@ export class UserRepository {
 
 	signJWT(email: string, userId: string): Promise<string> {
 		return new Promise((resolve, reject) => {
-			jwt.sign({ id: userId, email: email }, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+			jwt.sign({ id: userId, email: email, role: "USER" }, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
 				if (err) {
 					Logger.error(err.message);
 					reject('Failed to sign JWT!');

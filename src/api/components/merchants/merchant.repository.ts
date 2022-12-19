@@ -50,9 +50,20 @@ export class MerchantRepository {
 		});
 	}
 
+	readByEmail(email: string): Promise<IMerchant> {
+		return new Promise((resolve, reject) => {
+			pool.query<IMerchant>('SELECT * FROM merchants WHERE email = $1', [email], (err, res) => {
+				if (err) {
+					Logger.error(err.message);
+					reject('Failed to fetch user!');
+				} else resolve(res.rowCount ? res.rows[0] : undefined);
+			});
+		});
+	}
+
 	signJWT(email: string, merchantId: string): Promise<string> {
 		return new Promise((resolve, reject) => {
-			jwt.sign({ id: merchantId, email: email }, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+			jwt.sign({ id: merchantId, email: email, role: "MERCHANT" }, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
 				if (err) {
 					Logger.error(err.message);
 					reject('Failed to sign JWT!');

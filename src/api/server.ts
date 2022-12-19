@@ -5,6 +5,8 @@ import express, { json, Request, Response, NextFunction } from 'express';
 import Logger from '../config/logger';
 import { UserRoutes } from './components/user/routes';
 import { MerchantRoutes } from './components/merchants/routes'
+import { SessionRoutes } from './components/sessions/routes';
+import { BookingRoutes } from './components/bookings/routes';
 
 
 export class Server {
@@ -28,6 +30,8 @@ export class Server {
 		this._app.get('/', (req: Request, res: Response) => res.send('Hello World!'));
 		this._app.use('/users', new UserRoutes().router);
 		this._app.use('/merchants', new MerchantRoutes().router);
+		this._app.use('/sessions', new SessionRoutes().router);
+		this._app.use('/bookings', new BookingRoutes().router);
 	}
 
 	private registerErrorHandler() {
