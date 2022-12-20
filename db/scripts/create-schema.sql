@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS users;
 
-CREATE TABLE users (
-  	id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+CREATE TABLE users  (
+   	id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
 	name VARCHAR(100) NOT NULL,
 	email VARCHAR(50) UNIQUE NOT NULL,
 	username VARCHAR(30) UNIQUE NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE merchants (
-  	id uuid DEFAULT gen_random_uuid() PRIMARY KEY,	
+   	id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
 	name VARCHAR(100) NOT NULL,
 	email VARCHAR(50) UNIQUE NOT NULL,
 	username VARCHAR(30) UNIQUE NOT NULL,
@@ -28,13 +28,13 @@ CREATE TABLE merchants (
 );
 
 CREATE TABLE sessions(
-  	id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  	 id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
 	merchant_id uuid NOT NULL,
-	startsAt TIMESTAMP NOT NULL,
-	endsAt TIMESTAMP NOT NULL,
-	type DEFAULT WEEKLY VARCHAR(50) NOT NULL,
+	startsAt varchar NOT NULL,
+	endsAt varchar NOT NULL,
+	type  VARCHAR(50) NOT NULL,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (merchant_id) REFERENCES merchants(id),
+	FOREIGN KEY (merchant_id) REFERENCES merchants(id)
 );
 
 CREATE TABLE bookings(
