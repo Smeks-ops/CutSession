@@ -14,7 +14,6 @@ export class SessionController {
 	async readSessions(req: IRequest, res: Response, next: NextFunction) {
 		try {
 			const { merchantId } = req.params;
-			console.log(req.params);
 			const sessions = await this.repo.readAllByMerchantID(merchantId);
 			return res.status(200).json({ message: 'Sessions fetched successfully', sessions });
 		} catch (err) {

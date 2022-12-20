@@ -17,6 +17,17 @@ export class MerchantRepository {
 		});
 	}
 
+	paginatedReadAll(limit: number, offset: number): Promise<IMerchant[]> {
+		return new Promise((resolve, reject) => {
+			pool.query<IMerchant>('SELECT * FROM merchants LIMIT $1 OFFSET $2', [limit, offset], (err, res) => {
+				if (err) {
+					Logger.error(err.message);
+					reject('Failed to fetch merchants!');
+				} else resolve(res.rows);
+			});
+		});
+	}
+
 	readByID(merchantID: number): Promise<IMerchant> {
 		return new Promise((resolve, reject) => {
 			pool.query<IMerchant>('SELECT * FROM merchants WHERE id = $1', [merchantID], (err, res) => {
