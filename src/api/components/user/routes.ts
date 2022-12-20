@@ -13,6 +13,7 @@ export class UserRoutes {
 	}
 
 	private initRoutes(): void {
+		this.router.post('/', this.controller.createUser);
 		this.router.route('/:id').get(this.controller.readUser).delete(this.controller.deleteUser);
 		this.router.route('/sign-in').post(this.controller.login);
 		this.router.get('/', this.tokenMiddleware.use, this.controller.getClients);
