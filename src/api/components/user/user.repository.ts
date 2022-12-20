@@ -64,38 +64,19 @@ export class UserRepository {
 
 	signJWT(email: string, userId: string): Promise<string> {
 		return new Promise((resolve, reject) => {
-			jwt.sign({ id: userId, email: email, role: "USER" }, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
-				if (err) {
-					Logger.error(err.message);
-					reject('Failed to sign JWT!');
-				} else resolve(token);
-			});
+			jwt.sign(
+				{ id: userId, email: email, role: 'USER' },
+				process.env.JWT_SECRET,
+				{ expiresIn: '1h' },
+				(err, token) => {
+					if (err) {
+						Logger.error(err.message);
+						reject('Failed to sign JWT!');
+					} else resolve(token);
+				}
+			);
 		});
 	}
-
-	/* private async verify(payload: any, next: any): Promise<void> {
-		try {
-			//  pass error == null on error otherwise we get a 500 error instead of 401
-
-			const user = await this.userRepo.findOne({
-				relations: ['userRole'],
-				where: {
-					active: true,
-					id: payload.userID
-				}
-			});
-
-			if (!user) {
-				return next(null, null);
-			}
-
-			await this.setPermissions(user);
-
-			return next(null, user);
-		} catch (err) {
-			return next(err);
-		}
-	} */
 
 	create(user: UserDTO): Promise<IUser> {
 		return new Promise((resolve, reject) => {

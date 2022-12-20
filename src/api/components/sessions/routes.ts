@@ -13,7 +13,7 @@ export class SessionRoutes {
 	}
 
 	private initRoutes(): void {
-		// this.router.post('/', this.tokenMiddleware.use, this.controller.createSession);
+		this.router.post('/', this.tokenMiddleware.use, this.controller.createSession);
 		this.router.get('/:merchantId', this.tokenMiddleware.use,this.controller.readSessions);
 	}
 }

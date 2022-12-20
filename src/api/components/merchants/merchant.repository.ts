@@ -22,7 +22,7 @@ export class MerchantRepository {
 			pool.query<IMerchant>('SELECT * FROM merchants WHERE id = $1', [merchantID], (err, res) => {
 				if (err) {
 					Logger.error(err.message);
-					reject('Failed to fetch user!');
+					reject('Failed to fetch merchant!');
 				} else resolve(res.rowCount ? res.rows[0] : undefined);
 			});
 		});
@@ -33,7 +33,7 @@ export class MerchantRepository {
 			pool.query<IMerchant>('SELECT * FROM merchants WHERE email = $1 OR username = $2', [email, username], (err, res) => {
 				if (err) {
 					Logger.error(err.message);
-					reject('Failed to fetch user!');
+					reject('Failed to fetch merchant!');
 				} else resolve(res.rowCount ? res.rows[0] : undefined);
 			});
 		});
@@ -44,7 +44,7 @@ export class MerchantRepository {
 			pool.query<IMerchant>('SELECT * FROM merchants WHERE username = $1', [username], (err, res) => {
 				if (err) {
 					Logger.error(err.message);
-					reject('Failed to fetch user!');
+					reject('Failed to fetch merchant!');
 				} else resolve(res.rowCount ? res.rows[0] : undefined);
 			});
 		});
@@ -55,7 +55,7 @@ export class MerchantRepository {
 			pool.query<IMerchant>('SELECT * FROM merchants WHERE email = $1', [email], (err, res) => {
 				if (err) {
 					Logger.error(err.message);
-					reject('Failed to fetch user!');
+					reject('Failed to fetch merchant!');
 				} else resolve(res.rowCount ? res.rows[0] : undefined);
 			});
 		});

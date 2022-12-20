@@ -30,18 +30,4 @@ export class CreateBookingDTO {
 		if (!UtilityService.hasProperties(req, ['sessionId', 'date', 'notes', 'title'])) return undefined;
 		return new CreateBookingDTO(req.body.sessionId, req.body.date, req.body.notes, req.body.title);
 	}
-
-	/* isValid() {
-		const check = UtilityService.isValidEmail(this.email) && this.username.length > 0;
-		if (check === true) {
-			return {
-				check: true,
-				message: 'Valid',
-			}
-		}
-		return {
-			check,
-			message: 'Invalid email or username',
-		}
-	} */
 }

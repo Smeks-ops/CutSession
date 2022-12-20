@@ -1,17 +1,14 @@
 import { bind } from 'decko';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 
 import { CreateSessionsDTO } from './sessions.dto';
 import { SessionRepository } from './sessions.repository';
 import { MerchantRepository } from '../merchants/merchant.repository';
-import bcrypt from 'bcryptjs';
-import { UserRepository } from '../user/user.repository';
 import { IRequest } from '../../../services/auth/auth.types';
 
 export class SessionController {
 	private readonly repo: SessionRepository = new SessionRepository();
 	private readonly merchantRepo: MerchantRepository = new MerchantRepository();
-	private readonly userRepo: UserRepository = new UserRepository();
 
 	@bind
 	async readSessions(req: IRequest, res: Response, next: NextFunction) {
@@ -19,7 +16,7 @@ export class SessionController {
 			const { merchantId } = req.params;
 			console.log(req.params);
 			const sessions = await this.repo.readAllByMerchantID(merchantId);
-			return res.status(200).json({message: 'Sessions fetched successfully', sessions});
+			return res.status(200).json({ message: 'Sessions fetched successfully', sessions });
 		} catch (err) {
 			return next(err);
 		}
@@ -115,21 +112,4 @@ export class SessionController {
 			return next(err);
 		}
 	}
-
-	/* @bind
-	async deleteUser(req: Request, res: Response, next: NextFunction) {
-		try {
-			const { id } = req.params;
-			if (isNaN(+id)) return res.sendStatus(400);
-
-			const user = await this.repo.readByID(+id);
-			if (!user) return res.sendStatus(404);
-
-			await this.repo.delete(+id);
-
-			return res.sendStatus(204);
-		} catch (err) {
-			return next(err);
-		}
-	} */
 }

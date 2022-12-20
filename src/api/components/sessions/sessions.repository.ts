@@ -9,7 +9,7 @@ export class SessionRepository {
 			pool.query<ISessions>('SELECT * FROM sessions', (err, res) => {
 				if (err) {
 					Logger.error(err.message);
-					reject('Failed to fetch users!');
+					reject('Failed to fetch sessions!');
 				} else resolve(res.rows);
 			});
 		});
@@ -37,39 +37,6 @@ export class SessionRepository {
 		});
 	}
 
-	readByEmail(email: string): Promise<ISessions> {
-		return new Promise((resolve, reject) => {
-			pool.query<ISessions>('SELECT * FROM users WHERE email = $1', [email], (err, res) => {
-				if (err) {
-					Logger.error(err.message);
-					reject('Failed to fetch user!');
-				} else resolve(res.rowCount ? res.rows[0] : undefined);
-			});
-		});
-	}
-
-	readByEmailOrUsername(email: string, username: string): Promise<ISessions> {
-		return new Promise((resolve, reject) => {
-			pool.query<ISessions>('SELECT * FROM users WHERE email = $1 OR username = $2', [email, username], (err, res) => {
-				if (err) {
-					Logger.error(err.message);
-					reject('Failed to fetch user!');
-				} else resolve(res.rowCount ? res.rows[0] : undefined);
-			});
-		});
-	}
-
-	readByUsername(username: string): Promise<ISessions> {
-		return new Promise((resolve, reject) => {
-			pool.query<ISessions>('SELECT * FROM users WHERE username = $1', [username], (err, res) => {
-				if (err) {
-					Logger.error(err.message);
-					reject('Failed to fetch user!');
-				} else resolve(res.rowCount ? res.rows[0] : undefined);
-			});
-		});
-	}
-
 	create(session: CreateSessionsDTO, merchant_id): Promise<ISessions> {
 		return new Promise((resolve, reject) => {
 			pool.query(
@@ -87,10 +54,10 @@ export class SessionRepository {
 
 	delete(userID: number): Promise<boolean> {
 		return new Promise((resolve, reject) => {
-			pool.query<ISessions>('DELETE FROM users WHERE id = $1', [userID], (err, res) => {
+			pool.query<ISessions>('DELETE FROM sessions WHERE id = $1', [userID], (err, res) => {
 				if (err) {
 					Logger.error(err.message);
-					reject('Failed to delete user!');
+					reject('Failed to delete sessions!');
 				} else resolve(res.rowCount > 0);
 			});
 		});

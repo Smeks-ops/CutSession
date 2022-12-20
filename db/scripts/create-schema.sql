@@ -51,3 +51,6 @@ CREATE TABLE bookings(
 	FOREIGN KEY (session_id) REFERENCES sessions(id),
 	FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE INDEX merchants_idx_cityofoperation_id ON "merchants" ("cityofoperation","id");
+CREATE INDEX sessions_idx_id ON "sessions" ("id");

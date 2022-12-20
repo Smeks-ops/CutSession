@@ -1,13 +1,9 @@
-import * as fs from 'fs';
-import { createHash, timingSafeEqual } from 'crypto';
 import { Response, NextFunction } from 'express';
 import { get } from 'lodash';
 import { verifyJwt } from '../helpers/auth.helper';
 import { UserRepository } from '../components/user/user.repository';
 
 import { IRequest } from '../../services/auth/auth.types';
-import { Middleware } from 'express-validator/src/base';
-import { userInfo } from 'os';
 import { bind } from 'decko';
 import { MerchantRepository } from '../components/merchants/merchant.repository';
 
@@ -24,7 +20,6 @@ export class TokenMiddleware {
 		if (!accessToken || decoded === null) return res.status(401).json({ message: 'Invalid auth credentials' });
 
 		if (decoded && expired === true) return res.status(401).json({ message: 'Token expired' });
-
 
 		if (decoded.role === 'MERCHANT') {
 			const merchant = await this.merchantRepo.readByEmail(decoded.email);

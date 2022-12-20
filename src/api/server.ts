@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Client } from 'pg';
 import express, { json, Request, Response, NextFunction } from 'express';
 
 import Logger from '../config/logger';

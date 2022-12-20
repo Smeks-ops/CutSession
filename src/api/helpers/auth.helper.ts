@@ -3,7 +3,6 @@ import * as jwt from 'jsonwebtoken';
 
 
 export function verifyJwt(token: string, hashKey: string) {
-    // const publicKey = Buffer.from(keys[keyName], 'base64').toString('ascii');
   
     try {
       const decoded: any = jwt.verify(token, hashKey);

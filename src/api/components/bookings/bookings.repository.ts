@@ -15,6 +15,21 @@ export class BookingsRepository {
 		});
 	}
 
+	readAllByCity(city: string): Promise<IBookings[]> {
+		return new Promise((resolve, reject) => {
+			pool.query<IBookings>(
+				'SELECT * FROM bookings INNER JOIN sessions ON sessions.id = bookings.session_id INNER JOIN merchants ON merchants.id = sessions.merchant_id AND merchants.cityofoperation = $1',
+				[city],
+				(err, res) => {
+					if (err) {
+						Logger.error(err.message);
+						reject('Failed to fetch bookings!');
+					} else resolve(res.rows);
+				}
+			);
+		});
+	}
+
 	readAllByMerchantID(merchantId: string): Promise<IBookings[]> {
 		return new Promise((resolve, reject) => {
 			pool.query<IBookings>('SELECT * FROM bookings WHERE session_id = $1', [merchantId], (err, res) => {
@@ -59,28 +74,6 @@ export class BookingsRepository {
 		});
 	}
 
-	readByEmailOrUsername(email: string, username: string): Promise<IBookings> {
-		return new Promise((resolve, reject) => {
-			pool.query<IBookings>('SELECT * FROM users WHERE email = $1 OR username = $2', [email, username], (err, res) => {
-				if (err) {
-					Logger.error(err.message);
-					reject('Failed to fetch user!');
-				} else resolve(res.rowCount ? res.rows[0] : undefined);
-			});
-		});
-	}
-
-	readByUsername(username: string): Promise<IBookings> {
-		return new Promise((resolve, reject) => {
-			pool.query<IBookings>('SELECT * FROM users WHERE username = $1', [username], (err, res) => {
-				if (err) {
-					Logger.error(err.message);
-					reject('Failed to fetch user!');
-				} else resolve(res.rowCount ? res.rows[0] : undefined);
-			});
-		});
-	}
-
 	create(booking: CreateBookingDTO, user_id, bookingRef, startsat, endsat): Promise<IBookings> {
 		return new Promise((resolve, reject) => {
 			pool.query(
@@ -98,10 +91,10 @@ export class BookingsRepository {
 
 	delete(userID: number): Promise<boolean> {
 		return new Promise((resolve, reject) => {
-			pool.query<IBookings>('DELETE FROM users WHERE id = $1', [userID], (err, res) => {
+			pool.query<IBookings>('DELETE FROM bookings WHERE id = $1', [userID], (err, res) => {
 				if (err) {
 					Logger.error(err.message);
-					reject('Failed to delete user!');
+					reject('Failed to delete booking!');
 				} else resolve(res.rowCount > 0);
 			});
 		});

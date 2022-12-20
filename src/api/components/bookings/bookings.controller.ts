@@ -1,27 +1,20 @@
 import { bind } from 'decko';
-import { NextFunction, Request, Response } from 'express';
-
+import { NextFunction, Response } from 'express';
 import { CreateBookingDTO } from './bookings.dto';
 import { BookingsRepository } from './bookings.repository';
-import { MerchantRepository } from '../merchants/merchant.repository';
-import bcrypt from 'bcryptjs';
-import { UserRepository } from '../user/user.repository';
 import { IRequest } from '../../../services/auth/auth.types';
 import { SessionRepository } from '../sessions/sessions.repository';
 
 export class BookingController {
 	private readonly repo: BookingsRepository = new BookingsRepository();
-	private readonly merchantRepo: MerchantRepository = new MerchantRepository();
-	private readonly userRepo: UserRepository = new UserRepository();
 	private readonly sessionRepo: SessionRepository = new SessionRepository();
 
 	@bind
-	async readBookings(req: IRequest, res: Response, next: NextFunction) {
+	async readBookingsByCity(req: IRequest, res: Response, next: NextFunction) {
 		try {
-			
-
-			const bookings = await this.repo.readAll();
-			return res.json(bookings);
+			const { city } = req.params;
+			const bookings = await this.repo.readAllByCity(city);
+			return res.status(200).json({ message: 'Bookings fetched successfully', data: bookings });
 		} catch (err) {
 			return next(err);
 		}
@@ -51,27 +44,10 @@ export class BookingController {
 
 			const booking = await this.repo.create(dto, req.user.id, bookingRef, session.startsat, session.endsat);
 
-			return res.status(201).json({ booking, message: 'booking created successfully' });
+			return res.status(201).json({ data: booking, message: 'booking created successfully' });
 		} catch (err) {
 			console.log(err);
 			return next(err);
 		}
 	}
-
-	/* @bind
-	async deleteUser(req: Request, res: Response, next: NextFunction) {
-		try {
-			const { id } = req.params;
-			if (isNaN(+id)) return res.sendStatus(400);
-
-			const user = await this.repo.readByID(+id);
-			if (!user) return res.sendStatus(404);
-
-			await this.repo.delete(+id);
-
-			return res.sendStatus(204);
-		} catch (err) {
-			return next(err);
-		}
-	} */
 }

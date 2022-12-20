@@ -24,18 +24,4 @@ export class CreateSessionsDTO {
 		if (!UtilityService.hasProperties(req, ['startsAt', 'endsAt', 'type'])) return undefined;
 		return new CreateSessionsDTO(req.body.startsAt, req.body.endsAt, req.body.type);
 	}
-
-	/* isValid() {
-		const check = UtilityService.isValidEmail(this.email) && this.username.length > 0;
-		if (check === true) {
-			return {
-				check: true,
-				message: 'Valid',
-			}
-		}
-		return {
-			check,
-			message: 'Invalid email or username',
-		}
-	} */
 }

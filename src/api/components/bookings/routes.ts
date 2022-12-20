@@ -14,5 +14,6 @@ export class BookingRoutes {
 
 	private initRoutes(): void {
 		this.router.post('/', this.tokenMiddleware.use, this.controller.createBooking);
+		this.router.get('/:city', this.tokenMiddleware.use, this.controller.readBookingsByCity);
 	}
 }
