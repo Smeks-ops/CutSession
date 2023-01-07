@@ -50,8 +50,6 @@ export class SessionController {
 
 				const timeSlot = endTimeInMinutes - startTimeInMinutes;
 
-				console.log(timeSlot);
-
 				if (timeSlot === 45 || timeSlot === 60 || timeSlot === 90) {
 					const existingSession = await this.repo.readAllByMerchantID(merchantId);
 					if (existingSession.length > 0) {
